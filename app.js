@@ -11,10 +11,13 @@ const PORT = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.static("public"));
 
+fs.mkdir("public", () => {
+  console.log("Public folder created");
+});
 //store the file in a public folder
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads");
+    cb(null, "public");
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
@@ -37,7 +40,7 @@ app.post("/upload", upload, (req, res) => {
         url: "https://api.remove.bg/v1.0/removebg",
         formData: {
           image_file: fs.createReadStream(
-            `${__dirname}/uploads/${req.file.filename}`
+            `${__dirname}/public/${req.file.filename}`
           ),
           size: "auto",
         },
@@ -71,3 +74,4 @@ app.post("/upload", upload, (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on PORT ${PORT}`);
 });
+s;
