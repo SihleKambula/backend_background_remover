@@ -57,12 +57,12 @@ app.post("/upload", upload, (req, res) => {
             response.statusCode,
             body.toString("utf8")
           );
-        fs.writeFileSync(`no-bg.png`, body);
+        fs.writeFileSync(`public/no-bg.png`, body);
 
         console.log("done");
         res.status(201).json({
           mesg: "done",
-          pic: fs.createReadStream(`${__dirname}/no-bg.png`),
+          pic: fs.createReadStream(`${__dirname}/public/no-bg.png`),
         });
       }
     );
