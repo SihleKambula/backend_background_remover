@@ -14,7 +14,7 @@ app.use(express.static("public"));
 //store the file in a public folder
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public");
+    cb(null, "uploads");
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
@@ -37,7 +37,7 @@ app.post("/upload", upload, (req, res) => {
         url: "https://api.remove.bg/v1.0/removebg",
         formData: {
           image_file: fs.createReadStream(
-            `${__dirname}/public/${req.file.filename}`
+            `${__dirname}/uploads/${req.file.filename}`
           ),
           size: "auto",
         },
