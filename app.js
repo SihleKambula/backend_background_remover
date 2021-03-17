@@ -50,7 +50,7 @@ app.post("/upload", upload, (req, res) => {
           size: "auto",
         },
         headers: {
-          "X-Api-Key": "Zjh7vPYRyswnMwZEuKzUYVkh",
+          "X-Api-Key": process.env.API,
         },
         encoding: null,
       },
