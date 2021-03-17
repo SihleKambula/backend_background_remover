@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const fs = require("fs");
+const path = require("path");
 const multer = require("multer");
 const cors = require("cors");
 const request = require("request");
@@ -32,6 +33,10 @@ app.get("/", (req, res) => {
   res.status(200).send("Server up and running");
 });
 
+app.get("/download", (req, res) => {
+  res.download("./public/no-bg.png");
+});
+
 app.post("/upload", upload, (req, res) => {
   // console.log(req.file);
   try {
@@ -61,8 +66,10 @@ app.post("/upload", upload, (req, res) => {
 
         console.log("done");
         res.status(201).json({
-          mesg: "done",
-          pic: fs.createReadStream(`${__dirname}/public/no-bg.png`),
+          originalPic: path.basename(
+            `${__dirname}/public/${req.file.filename}`
+          ),
+          noBGPicture: path.basename(`${__dirname}/public/no-bg.png`),
         });
       }
     );
