@@ -5,6 +5,8 @@ const path = require("path");
 const multer = require("multer");
 const cors = require("cors");
 const request = require("request");
+require("dotenv").config();
+const { v4: uuidv4 } = require("uuid");
 
 // PORT
 const PORT = process.env.PORT || 8000;
@@ -15,6 +17,7 @@ app.use(express.static("public"));
 fs.mkdir("public", () => {
   console.log("Public folder created");
 });
+
 //store the file in a public folder
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -26,19 +29,21 @@ const storage = multer.diskStorage({
 });
 
 // an upload instance to receive a single file
-// the file functionq
 const upload = multer({ storage }).single("image");
+
+const id = uuidv4();
 
 app.get("/", (req, res) => {
   res.status(200).send("Server up and running");
 });
 
 app.get("/download", (req, res) => {
-  res.download("./public/no-bg.png");
+  res.download(`./public/${id}-no-bg.png`);
 });
 
 app.post("/upload", upload, (req, res) => {
   // console.log(req.file);
+
   try {
     request.post(
       {
@@ -62,14 +67,14 @@ app.post("/upload", upload, (req, res) => {
             response.statusCode,
             body.toString("utf8")
           );
-        fs.writeFileSync(`public/no-bg.png`, body);
+        fs.writeFileSync(`public/${id}-no-bg.png`, body);
 
         console.log("done");
         res.status(201).json({
           originalPic: path.basename(
             `${__dirname}/public/${req.file.filename}`
           ),
-          noBGPicture: path.basename(`${__dirname}/public/no-bg.png`),
+          noBGPicture: path.basename(`${__dirname}/public/${id}-no-bg.png`),
         });
       }
     );
